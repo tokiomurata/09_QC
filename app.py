@@ -8,8 +8,8 @@ import openai
 
 openai.api_key = st.secrets.OpenAIAPI.openai_api_key
 
-# housou.listから放送禁止用語を読み込む
-with open('housou.list', 'r', encoding='utf-8') as file:
+# housou.lstから放送禁止用語を読み込む
+with open('housou.lst', 'r', encoding='utf-8') as file:
     banned_words = [word.strip() for word in file]
 
 # 放送禁止用語をプロンプトに組み込む
