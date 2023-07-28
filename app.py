@@ -1,7 +1,3 @@
-# housou.lstから放送禁止用語を読み込む
-with open('housou.lst', 'r', encoding='utf-8') as file:
-    banned_words = [word.strip() for word in file]
-
 # 以下を「app.py」に書き込み
 import streamlit as st
 import openai
