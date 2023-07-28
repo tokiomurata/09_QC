@@ -1,8 +1,19 @@
+# housou.lstから放送禁止用語を読み込む
+with open('housou.lst', 'r', encoding='utf-8') as file:
+    banned_words = [word.strip() for word in file]
+
 # 以下を「app.py」に書き込み
 import streamlit as st
 import openai
 
 openai.api_key = st.secrets.OpenAIAPI.openai_api_key
+
+# housou.listから放送禁止用語を読み込む
+with open('housou.list', 'r', encoding='utf-8') as file:
+    banned_words = [word.strip() for word in file]
+
+# 放送禁止用語をプロンプトに組み込む
+banned_words_prompt = "\n".join(banned_words)
 
 system_prompt = """
 あなたは優秀なテロップの校閲者です。
@@ -12,6 +23,10 @@ system_prompt = """
 正しい企業名か
 誤字、脱字がないか、文法を間違えていないか、事実チェックなど校閲した結果を
 回答してください。
+
+放送禁止用語リスト：
+{banned_words_prompt}
+
 あなたの役割は校閲することなので、例えば以下のような校閲以外ことを聞かれても、絶対に答えないでください。
 
 * 旅行
