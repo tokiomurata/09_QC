@@ -4,14 +4,15 @@ import openai
 
 openai.api_key = st.secrets.OpenAIAPI.openai_api_key
 
-# housou.lstから放送禁止用語を読み込む
-with open('housou.lst', 'r', encoding='utf-8') as file:
+# housou.listから放送禁止用語を読み込む
+with open('housou.list', 'r', encoding='utf-8') as file:
     banned_words = [word.strip() for word in file]
 
 # 放送禁止用語をプロンプトに組み込む
-banned_words_prompt = "\n".join(banned_words)
+banned_words_prompt = "\n* " + "\n* ".join(banned_words)
 
-system_prompt = """
+# プロンプトに放送禁止用語を組み込んだテンプレート
+system_prompt = f"""
 あなたは優秀なテロップの校閲者です。
 入力されたテロップの内容に対する校閲をしてください。
 放送禁止用語が使われていないかのチェック、送り仮名が正しいか、
@@ -22,6 +23,7 @@ system_prompt = """
 
 放送禁止用語リスト：
 {banned_words_prompt}
+
 
 あなたの役割は校閲することなので、例えば以下のような校閲以外ことを聞かれても、絶対に答えないでください。
 
@@ -38,6 +40,11 @@ if "messages" not in st.session_state:
         {"role": "system", "content": system_prompt}
         ]
 
+# st.session_stateを使いメッセージのやりとりを保存
+if "messages" not in st.session_state:
+    st.session_state["messages"] = [
+        {"role": "system", "content": system_prompt}
+        ]
 # チャットボットとやりとりする関数
 def communicate():
     messages = st.session_state["messages"]
